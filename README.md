@@ -31,6 +31,7 @@ onChanged: (text) => debugPrint(text),
 AnimationSearchBar
 (
 padding: const EdgeInsets.symmetric(horizontal: 5),
+iconsColor: Colors.white,
 hintStyle: const TextStyle(
 color: Colors.white,
 ),
@@ -51,8 +52,6 @@ fontSize: 20,
 ],
 ),
 onChanged: (text) {},
-iconsColor: Colors.black.withOpacity(0.7)
-,
 )
 ,
 ```
