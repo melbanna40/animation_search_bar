@@ -2,6 +2,11 @@
 
 A Customizable Animated Search Bar. It is suitable for the AppBar.
 
+<a href="https://pub.dev/packages/animation_search_bar"><img src="https://img.shields.io/pub/v/animation_search_bar.svg" alt="Pub"></a>
+<a href="https://pub.dev/packages/animation_search_bar/score"><img src="https://img.shields.io/pub/likes/animation_search_bar?logo=flutter" alt="Pub likes"></a>
+<a href="https://pub.dev/packages/animation_search_bar/score"><img src="https://img.shields.io/pub/popularity/animation_search_bar?logo=flutter" alt="Pub popularity"></a>
+<a href="https://pub.dev/packages/animation_search_bar/score"><img src="https://img.shields.io/pub/points/animation_search_bar?logo=flutter" alt="Pub points"></a>
+
 ## Getting Started
 
 ### Simple use case
