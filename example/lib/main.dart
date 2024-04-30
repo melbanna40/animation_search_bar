@@ -27,37 +27,46 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.blue,
         appBar: PreferredSize(
-            preferredSize: const Size(double.infinity, 65),
-            child: SafeArea(
-                child: Container(
-              decoration: const BoxDecoration(color: Colors.white, boxShadow: [
-                BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 5,
-                    spreadRadius: 0,
-                    offset: Offset(0, 5))
-              ]),
-              alignment: Alignment.center,
-              child: AnimationSearchBar(
-                iconsColor: Colors.black.withOpacity(0.7),
-                centerTitle: 'App Title',
-                onChanged: (text) {
-                  countries = _countries
-                      .where(
-                          (e) => e.toLowerCase().contains(text.toLowerCase()))
-                      .toList();
-                  setState(() {});
-                },
-                searchTextEditingController: controller,
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-              ),
-            ))),
-        body: ListView.builder(
-          itemCount: countries.length,
-          itemBuilder: (context, index) =>
-              ListTile(title: Text(countries[index])),
-        ));
+          preferredSize: const Size.fromHeight(75),
+          // here the desired height
+          child: AnimationSearchBar(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            hintStyle: const TextStyle(
+              color: Colors.white,
+            ),
+            title: const Row(
+              children: [
+                Icon(
+                  Icons.waving_hand_sharp,
+                  color: Colors.white,
+                ),
+                SizedBox(
+                  width: 4,
+                ),
+                Text('Animation Search Bar',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    )),
+              ],
+            ),
+            onChanged: (text) {},
+            iconsColor: Colors.black.withOpacity(0.7),
+          ),
+        ),
+        body: Container(
+            padding: const EdgeInsets.all(4),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+              color: Colors.white,
+            ),
+            child: ListView.builder(
+              itemCount: countries.length,
+              itemBuilder: (context, index) =>
+                  ListTile(title: Text(countries[index])),
+            )));
   }
 }
 

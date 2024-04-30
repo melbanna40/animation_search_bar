@@ -11,12 +11,16 @@ A Customizable Animated Search Bar. It is suitable for the AppBar.
 
 ### Simple use case
 ```dart
-AnimationSearchBar(
-   backIconColor: Colors.black,
-   centerTitle: 'App Title',
-   onChanged: (text) => debugPrint(text),
-   searchTextEditingController: controller,
-   horizontalPadding: 5)
+AnimationSearchBar
+(
+backIconColor: Colors.black,
+title:Text('Animation Search Bar',
+style: TextStyle(
+color: Colors.white,
+fontSize: 20,
+)),
+onChanged: (text) => debugPrint(text),
+)
 ```
 | Simple use case | Using all properties | 
 |:-------------:|:-------------:|
@@ -24,48 +28,33 @@ AnimationSearchBar(
 
 ### All properties of this package
 ```dart
-AnimationSearchBar(
-   ///! Required
-   onChanged: (text) => debugPrint(text),
-   searchTextEditingController: controller,
-
-   ///! Optional. For more customization
-   //? Back Button
-   backIcon: Icons.arrow_back_ios_new,
-   backIconColor: Colors.white,
-   isBackButtonVisible: true,
-   previousScreen: null, // It will push and replace this screen when pressing the back button
-   //? Close Button
-   closeIconColor: Colors.white,
-   //? Center Title
-   centerTitle: 'App Title', 
-   hintText: 'Search here...',
-   centerTitleStyle: const TextStyle(
-     fontWeight: FontWeight.w500,color: Colors.white, fontSize: 20),
-   //? Search hint text
-   hintStyle: const TextStyle(
-     color: Colors.white, fontWeight: FontWeight.w300),
-   //? Search Text
-   textStyle: const TextStyle(
-     color: Colors.white, fontWeight: FontWeight.w300),
-   //? Cursor color
-   cursorColor: Colors.lightBlue.shade300,
-   //? Duration
-   duration: const Duration(milliseconds: 500),
-   //? Height, Width & Padding
-   searchFieldHeight: 35, // Total height of the search field
-   searchBarHeight: 50, // Total height of this Widget
-   searchBarWidth: MediaQuery.of(context).size.width - 20, // Total width of this Widget
-   horizontalPadding: 5,
-   verticalPadding: 0,
-   //? Search icon color
-   searchIconColor: Colors.white.withOpacity(.7),
-   //? Search field background decoration
-   searchFieldDecoration: BoxDecoration(
-     color: Colors.blueGrey.shade700,
-     border: Border.all(color: Colors.black.withOpacity(.2), width: .5),
-     borderRadius: BorderRadius.circular(15)),
-   )
+AnimationSearchBar
+(
+padding: const EdgeInsets.symmetric(horizontal: 5),
+hintStyle: const TextStyle(
+color: Colors.white,
+),
+title: const Row(
+children: [
+Icon(
+Icons.waving_hand_sharp,
+color: Colors.white,
+),
+SizedBox(
+width: 4,
+),
+Text('Animation Search Bar',
+style: TextStyle(
+color: Colors.white,
+fontSize: 20,
+)),
+],
+),
+onChanged: (text) {},
+iconsColor: Colors.black.withOpacity(0.7)
+,
+)
+,
 ```
 
 #### Background Color
