@@ -10,41 +10,34 @@ final searchingProvider = StateProvider.autoDispose((ref) => false);
 // ignore: must_be_immutable
 class AnimationSearchBar extends StatelessWidget {
   AnimationSearchBar({
-    Key? key,
+    super.key,
+    required this.iconsColor,
+    required this.onChanged,
+    this.searchTextEditingController,
     this.searchBarWidth,
     this.searchBarHeight,
     this.previousScreen,
-    this.backIconColor,
-    this.closeIconColor,
-    this.searchIconColor,
+    this.closeIcon,
     this.centerTitle,
     this.centerTitleStyle,
     this.searchFieldHeight,
     this.searchFieldDecoration,
-    this.cursorColor,
     this.textStyle,
     this.hintText,
     this.hintStyle,
-    required this.onChanged,
-    required this.searchTextEditingController,
-    this.horizontalPadding,
-    this.verticalPadding,
     this.isBackButtonVisible,
     this.backIcon,
+    this.padding,
     this.duration,
-  }) : super(key: key);
+  });
 
   ///
   final double? searchBarWidth;
   final double? searchBarHeight;
   final double? searchFieldHeight;
-  final double? horizontalPadding;
-  final double? verticalPadding;
   final Widget? previousScreen;
-  final Color? backIconColor;
-  final Color? closeIconColor;
-  final Color? searchIconColor;
-  final Color? cursorColor;
+  final Widget? closeIcon;
+  final Color iconsColor;
   final String? centerTitle;
   final String? hintText;
   final bool? isBackButtonVisible;
@@ -53,63 +46,61 @@ class AnimationSearchBar extends StatelessWidget {
   final TextStyle? textStyle;
   final TextStyle? hintStyle;
   final Decoration? searchFieldDecoration;
+  final EdgeInsets? padding;
   late Duration? duration;
-  final TextEditingController searchTextEditingController;
+  final TextEditingController? searchTextEditingController;
   final Function(String) onChanged;
 
   @override
   Widget build(BuildContext context) {
-    final _duration = duration ?? const Duration(milliseconds: 500);
-    final _searchFieldHeight = searchFieldHeight ?? 40;
-    final _hPadding = horizontalPadding != null ? horizontalPadding! * 2 : 0;
-    final _searchBarWidth =
-        searchBarWidth ?? MediaQuery.of(context).size.width - _hPadding;
-    final _isBackButtonVisible = isBackButtonVisible ?? true;
+    final duration = this.duration ?? const Duration(milliseconds: 500);
+    final searchFieldHeight = this.searchFieldHeight ?? 40;
+    final searchBarWidth =
+        this.searchBarWidth ?? MediaQuery.sizeOf(context).width - 40;
+    final isBackButtonVisible = this.isBackButtonVisible ?? true;
     return ProviderScope(
       child: Consumer(builder: (context, ref, __) {
-        final _isSearching = ref.watch(searchingProvider);
-        final _searchNotifier = ref.watch(searchingProvider.notifier);
+        final isSearching = ref.watch(searchingProvider);
+        final searchNotifier = ref.watch(searchingProvider.notifier);
         return Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: horizontalPadding ?? 0,
-              vertical: verticalPadding ?? 0),
+          padding: padding ?? EdgeInsets.zero,
           child: SizedBox(
-            width: _searchBarWidth,
+            width: searchBarWidth,
             height: searchBarHeight ?? 50,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 /// back Button
-                _isBackButtonVisible
+                isBackButtonVisible
                     ? AnimatedOpacity(
-                        opacity: _isSearching ? 0 : 1,
-                        duration: _duration,
+                        opacity: isSearching ? 0 : 1,
+                        duration: duration,
                         child: AnimatedContainer(
                             curve: Curves.easeInOutCirc,
-                            width: _isSearching ? 0 : 35,
-                            height: _isSearching ? 0 : 35,
-                            duration: _duration,
+                            width: isSearching ? 0 : 35,
+                            height: isSearching ? 0 : 35,
+                            duration: duration,
                             child: FittedBox(
                                 child: KBackButton(
                                     icon: backIcon,
-                                    iconColor: backIconColor,
+                                    iconColor: iconsColor,
                                     previousScreen: previousScreen))))
                     : AnimatedContainer(
                         curve: Curves.easeInOutCirc,
-                        width: _isSearching ? 0 : 35,
-                        height: _isSearching ? 0 : 35,
-                        duration: _duration),
+                        width: isSearching ? 0 : 35,
+                        height: isSearching ? 0 : 35,
+                        duration: duration),
 
                 /// text
                 AnimatedOpacity(
-                  opacity: _isSearching ? 0 : 1,
-                  duration: _duration,
+                  opacity: isSearching ? 0 : 1,
+                  duration: duration,
                   child: AnimatedContainer(
                     curve: Curves.easeInOutCirc,
-                    width: _isSearching ? 0 : _searchBarWidth - 100,
-                    duration: _duration,
+                    width: isSearching ? 0 : searchBarWidth - 100,
+                    duration: duration,
                     alignment: Alignment.center,
                     child: FittedBox(
                       child: Text(
@@ -128,23 +119,23 @@ class AnimationSearchBar extends StatelessWidget {
 
                 /// close search
                 AnimatedOpacity(
-                  opacity: _isSearching ? 1 : 0,
-                  duration: _duration,
+                  opacity: isSearching ? 1 : 0,
+                  duration: duration,
                   child: AnimatedContainer(
                     curve: Curves.easeInOutCirc,
-                    width: _isSearching ? 35 : 0,
-                    height: _isSearching ? 35 : 0,
-                    duration: _duration,
+                    width: isSearching ? 35 : 0,
+                    height: isSearching ? 35 : 0,
+                    duration: duration,
                     child: FittedBox(
                       child: KCustomButton(
                         widget: Padding(
                             padding: const EdgeInsets.all(3),
-                            child: Icon(Icons.close,
-                                color: closeIconColor ??
-                                    Colors.black.withOpacity(.7))),
+                            child: closeIcon ??
+                                Icon(Icons.close, color: iconsColor)),
                         onPressed: () {
-                          _searchNotifier.state = false;
-                          searchTextEditingController.clear();
+                          onChanged.call('');
+                          searchNotifier.state = false;
+                          searchTextEditingController?.clear();
                         },
                       ),
                     ),
@@ -153,18 +144,15 @@ class AnimationSearchBar extends StatelessWidget {
 
                 /// input panel
                 AnimatedOpacity(
-                  opacity: _isSearching ? 1 : 0,
-                  duration: _duration,
+                  opacity: isSearching ? 1 : 0,
+                  duration: duration,
                   child: AnimatedContainer(
                     curve: Curves.easeInOutCirc,
-                    duration: _duration,
-                    width: _isSearching
-                        ? _searchBarWidth - 55 - (horizontalPadding ?? 0 * 2)
-                        : 0,
-                    height: _isSearching ? _searchFieldHeight : 20,
+                    duration: duration,
+                    width: isSearching ? searchBarWidth - 55 : 0,
+                    height: isSearching ? searchFieldHeight : 20,
                     margin: EdgeInsets.only(
-                        left: _isSearching ? 5 : 0,
-                        right: _isSearching ? 10 : 0),
+                        left: isSearching ? 5 : 0, right: isSearching ? 10 : 0),
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     alignment: Alignment.center,
                     decoration: searchFieldDecoration ??
@@ -175,7 +163,7 @@ class AnimationSearchBar extends StatelessWidget {
                             borderRadius: BorderRadius.circular(15)),
                     child: TextField(
                       controller: searchTextEditingController,
-                      cursorColor: cursorColor ?? Colors.lightBlue,
+                      cursorColor: iconsColor,
                       style: textStyle ??
                           const TextStyle(
                               color: Colors.black, fontWeight: FontWeight.w300),
@@ -202,22 +190,20 @@ class AnimationSearchBar extends StatelessWidget {
 
                 ///  search button
                 AnimatedOpacity(
-                  opacity: _isSearching ? 0 : 1,
-                  duration: _duration,
+                  opacity: isSearching ? 0 : 1,
+                  duration: duration,
                   child: AnimatedContainer(
                     curve: Curves.easeInOutCirc,
-                    duration: _duration,
-                    width: _isSearching ? 0 : 35,
-                    height: _isSearching ? 0 : 35,
+                    duration: duration,
+                    width: isSearching ? 0 : 35,
+                    height: isSearching ? 0 : 35,
                     child: FittedBox(
                       child: KCustomButton(
                           widget: Padding(
                               padding: const EdgeInsets.all(5),
                               child: Icon(Icons.search,
-                                  size: 35,
-                                  color: searchIconColor ??
-                                      Colors.black.withOpacity(.7))),
-                          onPressed: () => _searchNotifier.state = true),
+                                  size: 35, color: iconsColor)),
+                          onPressed: () => searchNotifier.state = true),
                     ),
                   ),
                 )
@@ -237,12 +223,11 @@ class KCustomButton extends StatelessWidget {
   final double? radius;
 
   const KCustomButton(
-      {Key? key,
+      {super.key,
       required this.widget,
       required this.onPressed,
       this.radius,
-      this.onLongPress})
-      : super(key: key);
+      this.onLongPress});
 
   @override
   Widget build(BuildContext context) {
@@ -254,12 +239,12 @@ class KCustomButton extends StatelessWidget {
             child: InkWell(
                 splashColor: Theme.of(context).primaryColor.withOpacity(.2),
                 highlightColor: Theme.of(context).primaryColor.withOpacity(.05),
+                onTap: onPressed,
+                onLongPress: onLongPress,
                 child: Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                    child: widget),
-                onTap: onPressed,
-                onLongPress: onLongPress)));
+                    child: widget))));
   }
 }
 
@@ -267,12 +252,12 @@ class KBackButton extends StatelessWidget {
   final Widget? previousScreen;
   final Color? iconColor;
   final IconData? icon;
+
   const KBackButton(
-      {Key? key,
+      {super.key,
       required this.previousScreen,
       required this.iconColor,
-      required this.icon})
-      : super(key: key);
+      required this.icon});
 
   @override
   Widget build(BuildContext context) {

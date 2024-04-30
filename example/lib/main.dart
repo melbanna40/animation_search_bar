@@ -7,7 +7,7 @@ void main() =>
     runApp(const MaterialApp(home: Home(), debugShowCheckedModeBanner: false));
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
@@ -16,6 +16,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late TextEditingController controller;
   late List<String> countries;
+
   @override
   void initState() {
     super.initState();
@@ -39,17 +40,18 @@ class _HomeState extends State<Home> {
               ]),
               alignment: Alignment.center,
               child: AnimationSearchBar(
-                  backIconColor: Colors.black,
-                  centerTitle: 'App Title',
-                  onChanged: (text) {
-                    countries = _countries
-                        .where(
-                            (e) => e.toLowerCase().contains(text.toLowerCase()))
-                        .toList();
-                    setState(() {});
-                  },
-                  searchTextEditingController: controller,
-                  horizontalPadding: 5),
+                iconsColor: Colors.black.withOpacity(0.7),
+                centerTitle: 'App Title',
+                onChanged: (text) {
+                  countries = _countries
+                      .where(
+                          (e) => e.toLowerCase().contains(text.toLowerCase()))
+                      .toList();
+                  setState(() {});
+                },
+                searchTextEditingController: controller,
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+              ),
             ))),
         body: ListView.builder(
           itemCount: countries.length,
