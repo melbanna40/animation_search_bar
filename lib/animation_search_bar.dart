@@ -67,7 +67,7 @@ class AnimationSearchBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                height: searchFieldHeight,
+                height: searchBarHeight,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
